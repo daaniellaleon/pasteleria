@@ -6,7 +6,7 @@
     "start": "node server.js",
     "create-admins": "node create-admins/create-admins.js",
     "test": "jest",
-    "test:coverage": "jest --coverage --coverageReporters=lcov"
+    "test:coverage": "jest --coverage --coverageReporters=lcov --coverageReporters=text"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
