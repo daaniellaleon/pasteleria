@@ -1,0 +1,95 @@
+﻿<Window x:Class="Pasteleria_Alemana.EditarProductoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Editar Producto"
+        Height="620" Width="450"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        WindowStyle="None"
+        AllowsTransparency="True">
+
+    <Border CornerRadius="20"
+            BorderBrush="#22000000"
+            BorderThickness="1"
+            Background="White">
+        <Border.Effect>
+            <DropShadowEffect ShadowDepth="4" BlurRadius="15" Opacity="0.25"/>
+        </Border.Effect>
+
+        <Grid Margin="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Barra superior -->
+            <DockPanel Grid.Row="0" LastChildFill="False" Margin="0,0,0,20"
+                       MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                <TextBlock Text="✏️ Editar Producto"
+                           Foreground="#D4AF37"
+                           FontSize="24"
+                           FontWeight="Bold"/>
+
+                <Button Content="✕"
+                        Width="32" Height="32"
+                        Background="Transparent"
+                        Foreground="#64748B"
+                        FontSize="16"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        DockPanel.Dock="Right"
+                        Click="BtnCerrar_Click"/>
+            </DockPanel>
+
+            <!-- Formulario -->
+            <StackPanel Grid.Row="1">
+
+                <TextBlock Text="Producto" FontWeight="SemiBold" Margin="5,0,0,5"/>
+                <TextBox x:Name="TxtProducto" MaxLength="120" Height="40" Padding="10"
+                         BorderBrush="#E2E8F0" Background="#F8FAFC" Margin="0,0,0,12"/>
+
+                <TextBlock Text="Categoría" FontWeight="SemiBold" Margin="5,0,0,5"/>
+                <ComboBox x:Name="CmbCategoria" Height="40" Padding="8"
+          BorderBrush="#E2E8F0" BorderThickness="1" Background="#F8FAFC"
+          Margin="0,0,0,12">
+                    <ComboBoxItem Content="Pan"/>
+                    <ComboBoxItem Content="Galletas"/>
+                    <ComboBoxItem Content="Postres"/>
+                    <ComboBoxItem Content="Cafés"/>
+                    <ComboBoxItem Content="Batidos"/>
+                </ComboBox>
+
+
+                <TextBlock Text="Precio" FontWeight="SemiBold" Margin="5,0,0,5"/>
+                <TextBox x:Name="TxtPrecio" MaxLength="12" Height="40" Padding="10"
+                         BorderBrush="#E2E8F0" Background="#F8FAFC" Margin="0,0,0,12"/>
+
+                <TextBlock Text="Stock" FontWeight="SemiBold" Margin="5,0,0,5"/>
+                <TextBox x:Name="TxtStock" MaxLength="6" Height="40" Padding="10"
+                         BorderBrush="#E2E8F0" Background="#F8FAFC" Margin="0,0,0,12"/>
+
+            
+            </StackPanel>
+
+            <!-- Botón Guardar -->
+            <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,30,0,10">
+                <Button Content="Guardar cambios"
+                        Width="200" Height="45"
+                        FontWeight="SemiBold"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Click="BtnGuardar_Click">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#1E293B" Offset="0"/>
+                            <GradientStop Color="#334155" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
