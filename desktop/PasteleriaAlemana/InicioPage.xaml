@@ -1,0 +1,101 @@
+﻿<Page x:Class="Pasteleria_Alemana.InicioPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="InicioPage">
+
+    <Grid>
+        <!-- Fondo translúcido -->
+        <Border CornerRadius="20"
+                Margin="10"
+                Background="Transparent"
+                ClipToBounds="True">
+            <fw:AcrylicPanel TintColor="Gray"
+                             TintOpacity="0.3"
+                             NoiseOpacity="0.02"
+                             Background="Transparent"
+                             Margin="-10,0,0,0">
+                <StackPanel Margin="20">
+
+
+                    <!-- Botón Iniciar Venta -->
+
+                    <TextBlock Text="Dashboard de Ventas"
+                               FontSize="24"
+                               FontWeight="Bold"
+                               Foreground="Black"
+                               Width="242"/>
+                    <Border CornerRadius="20"
+                            Background="#D61A3B"
+                            HorizontalAlignment="Center"
+                            Margin="-200,25,5,10"
+                            Width="444"
+                            Height="109">
+                        <Button Content="Iniciar Venta"
+                                Width="450"
+                                Height="109"
+                                FontWeight="Bold"
+                                Background="Transparent"
+                                Foreground="White"
+                                FontSize="36"
+                                Click="IniciarVenta_Click"
+                                RenderTransformOrigin="0.505,0.533"
+                                HorizontalAlignment="Center"/>
+                    </Border>
+
+                </StackPanel>
+            </fw:AcrylicPanel>
+        </Border>
+
+        <!-- 📌 Reloj -->
+        <Border CornerRadius="15"
+                Background="#FFD39E24"
+                Padding="10"
+                Margin="540,90,0,0"
+                Width="170" Height="100"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top">
+            <StackPanel>
+
+
+                <!-- Hora + AM/PM en una fila -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Hora -->
+                    <TextBlock x:Name="HoraText"
+                               FontSize="28"
+                               FontWeight="Bold"
+                               Foreground="Black"
+                               VerticalAlignment="Center"
+                               Grid.Column="0"/>
+
+                    <!-- AM/PM -->
+                    <TextBlock x:Name="AmPmText"
+                               FontSize="14"
+                               FontWeight="Bold"
+                               Foreground="Black"
+                               VerticalAlignment="Center"
+                               Grid.Column="1"
+                               Margin="5,0,0,0"/>
+                </Grid>
+
+                <!-- Fecha -->
+                <TextBlock x:Name="FechaText"
+                           FontSize="14"
+                           FontWeight="Bold"
+                           Foreground="Black"
+                           HorizontalAlignment="Center"
+                           Margin="0,5,0,0"
+                           TextWrapping="Wrap"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>
