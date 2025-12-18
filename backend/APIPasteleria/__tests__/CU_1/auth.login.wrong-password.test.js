@@ -2,10 +2,10 @@ const request = require("supertest");
 const app = require("../../app");
 
 describe("CU1 - Autenticación de Usuarios", () => {
-  it("CU1-CP3 Campo vacío - Falta contraseña", async () => {
+  it("CU1-CP4 Contraseña inválida - Contraseña incorrecta", async () => {
     const requestBody = {
-      username: "admin",
-      password: "",
+      username: "diegoventas",
+      password: "contrasenamala123",
     };
 
     const response = await request(app)
@@ -13,7 +13,7 @@ describe("CU1 - Autenticación de Usuarios", () => {
       .send(requestBody)
       .expect("Content-Type", /json/);
 
-    expect(response.status).toBe(400);
-    expect(response.body).toEqual({ mensaje: "Debe ingresar usuario y contraseña" });
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ mensaje: "Contraseña incorrecta" });
   });
 });
