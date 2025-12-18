@@ -1,0 +1,141 @@
+name: SonarCloud Analysis
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+env:
+  CI_DB_NAME: pasteleriadb
+  CI_DB_USER: ciuser
+  CI_DB_PASSWORD: cipassword123
+  CI_TEST_USER: testuser
+  CI_TEST_PASSWORD: testpass123
+  CI_TEST_ROLE: ventas
+
+jobs:
+  sonarcloud:
+    name: Build, Test & SonarCloud
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+      actions: read
+      statuses: write
+
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_DATABASE: pasteleriadb
+          MYSQL_USER: ciuser
+          MYSQL_PASSWORD: cipassword123
+          MYSQL_ROOT_PASSWORD: rootpass
+          MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/APIPasteleria/package-lock.json
+
+      - name: Install dependencies
+        working-directory: backend/APIPasteleria
+        run: npm ci
+
+      - name: Wait for MySQL to be ready
+        run: |
+          for i in {1..30}; do
+            if mysqladmin ping -h 127.0.0.1 -u${{ env.CI_DB_USER }} -p${{ env.CI_DB_PASSWORD }} --silent 2>/dev/null; then
+              echo "MySQL is ready!"
+              break
+            fi
+            echo "Waiting for MySQL... ($i/30)"
+            sleep 2
+          done
+
+      - name: Run database seed
+        working-directory: backend/APIPasteleria
+        env:
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: ${{ env.CI_DB_USER }}
+          DB_PASSWORD: ${{ env.CI_DB_PASSWORD }}
+          DB_NAME: ${{ env.CI_DB_NAME }}
+          TEST_LOGIN_USER: ${{ env.CI_TEST_USER }}
+          TEST_LOGIN_PASSWORD: ${{ env.CI_TEST_PASSWORD }}
+          TEST_LOGIN_ROLE: ${{ env.CI_TEST_ROLE }}
+        run: node scripts/seed-ci.js
+
+      - name: Run tests with coverage and JUnit report
+        working-directory: backend/APIPasteleria
+        env:
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: ${{ env.CI_DB_USER }}
+          DB_PASSWORD: ${{ env.CI_DB_PASSWORD }}
+          DB_NAME: ${{ env.CI_DB_NAME }}
+          TEST_LOGIN_USER: ${{ env.CI_TEST_USER }}
+          TEST_LOGIN_PASSWORD: ${{ env.CI_TEST_PASSWORD }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: npm run test:ci
+
+      - name: Test Report (JUnit)
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Jest Tests
+          path: backend/APIPasteleria/test-results/junit.xml
+          reporter: java-junit
+          list-suites: all
+          list-tests: all
+          fail-on-error: false
+
+      - name: Upload test results (JUnit XML)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-junit
+          path: backend/APIPasteleria/test-results/junit.xml
+          retention-days: 30
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: backend/APIPasteleria/coverage/
+          retention-days: 30
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: backend/APIPasteleria
+          args: >
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
+            -Dsonar.sources=.
+            -Dsonar.exclusions=node_modules/**,coverage/**,__tests__/**
+            -Dsonar.tests=__tests__
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
