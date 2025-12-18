@@ -27,6 +27,12 @@ describe("CU3 - Autenticación de Usuarios", () => {
     expect(typeof response.body.token).toBe("string");
     expect(response.body.token.length).toBeGreaterThan(0);
 
+    console.log(
+      "[EVIDENCE][CU3-CP1] EXPECTED status=200 body has token (only token) | ACTUAL status=%s body=%s",
+      response.status,
+      JSON.stringify(response.body)
+    );
+
     const payload = jwt.verify(response.body.token, jwtSecret);
     expect(payload).toHaveProperty("id");
     expect(typeof payload.id).toBe("number");
@@ -34,5 +40,13 @@ describe("CU3 - Autenticación de Usuarios", () => {
     expect(payload).toHaveProperty("rol", expectedRole);
     expect(payload).toHaveProperty("iat");
     expect(payload).toHaveProperty("exp");
+
+    console.log(
+      "[EVIDENCE][CU3-CP1] EXPECTED jwt.username=%s jwt.rol=%s | ACTUAL jwt.username=%s jwt.rol=%s",
+      username,
+      expectedRole,
+      payload.username,
+      payload.rol
+    );
   });
 });

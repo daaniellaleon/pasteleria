@@ -15,5 +15,11 @@ describe("CU3 - Autenticación de Usuarios", () => {
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ mensaje: "Debe ingresar usuario y contraseña" });
+
+    console.log(
+      "[EVIDENCE][CU3-CP2] EXPECTED status=400 body={mensaje:'Debe ingresar usuario y contraseña'} | ACTUAL status=%s body=%s",
+      response.status,
+      JSON.stringify(response.body)
+    );
   });
 });

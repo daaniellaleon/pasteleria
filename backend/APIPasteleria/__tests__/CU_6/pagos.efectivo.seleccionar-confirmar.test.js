@@ -55,6 +55,12 @@ describe("CU6 - Gestionar Pagos", () => {
       );
       expect(seleccionarRes.body).toHaveProperty("requiereMonto", true);
 
+      console.log(
+        "[EVIDENCE][CU6-CP21][seleccionar] EXPECTED status=200 mensaje='Método efectivo seleccionado, falta monto recibido' requiereMonto=true | ACTUAL status=%s body=%s",
+        seleccionarRes.status,
+        JSON.stringify(seleccionarRes.body)
+      );
+
       // 5) Confirmar pago en efectivo (monto recibido = 4.00)
       const pagarRes = await request(app)
         .post("/api/gestionarPagos/pagar-efectivo")
@@ -64,6 +70,12 @@ describe("CU6 - Gestionar Pagos", () => {
 
       expect(pagarRes.status).toBe(200);
       expect(pagarRes.body).toHaveProperty("mensaje", "Pago en efectivo confirmado");
+
+      console.log(
+        "[EVIDENCE][CU6-CP21][pagar-efectivo] EXPECTED status=200 mensaje='Pago en efectivo confirmado' compra.metodo_pago='efectivo' total=4.00 montoRecibido=4.00 cambio=0.00 | ACTUAL status=%s body=%s",
+        pagarRes.status,
+        JSON.stringify(pagarRes.body)
+      );
 
       expect(pagarRes.body).toHaveProperty("compra");
       expect(pagarRes.body.compra).toHaveProperty("id");

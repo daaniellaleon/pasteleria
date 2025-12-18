@@ -15,5 +15,11 @@ describe("CU3 - Autenticación de Usuarios", () => {
 
     expect(response.status).toBe(401);
     expect(response.body).toEqual({ mensaje: "Contraseña incorrecta" });
+
+    console.log(
+      "[EVIDENCE][CU3-CP4] EXPECTED status=401 body={mensaje:'Contraseña incorrecta'} | ACTUAL status=%s body=%s",
+      response.status,
+      JSON.stringify(response.body)
+    );
   });
 });
