@@ -24,6 +24,8 @@ jobs:
       contents: read
       checks: write
       pull-requests: write
+      actions: read
+      statuses: write
 
     services:
       mysql:
@@ -97,7 +99,7 @@ jobs:
         run: npm run test:ci
 
       - name: Test Report (JUnit)
-        uses: dorny/test-reporter@v2
+        uses: dorny/test-reporter@v1
         if: always()
         with:
           name: Jest Tests
@@ -105,8 +107,7 @@ jobs:
           reporter: java-junit
           list-suites: all
           list-tests: all
-          use-actions-summary: true
-          fail-on-error: true
+          fail-on-error: false
 
       - name: Upload test results (JUnit XML)
         uses: actions/upload-artifact@v4
@@ -125,7 +126,7 @@ jobs:
           retention-days: 30
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarcloud-github-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
