@@ -1,11 +1,11 @@
 const request = require("supertest");
 const app = require("../../app");
 
-describe("CU1 - Autenticación de Usuarios", () => {
-  it("CU1-CP3 Campo vacío - Falta contraseña", async () => {
+describe("CU3 - Autenticación de Usuarios", () => {
+  it("CU3-CP2 Campo vacío - Debe ingresar usuario y contraseña", async () => {
     const requestBody = {
-      username: "admin",
-      password: "",
+      username: "",
+      password: "admin12345678",
     };
 
     const response = await request(app)
