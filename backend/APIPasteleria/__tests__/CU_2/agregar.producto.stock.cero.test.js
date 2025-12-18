@@ -4,7 +4,7 @@ const { generarToken } = require('../../auth/auth');
 const pool = require('../../db/db');
 
 describe('CU_2 - Agregar producto (caso fallido)', () => {
-  it("no agrega 'Pan integral' cuando stock = 0", async () => {
+  it("no agrega producto cuando stock = 0", async () => {
     const token = generarToken({ id: 9998, username: 'test-inventario', rol: 'inventario' });
 
     const nuevoProducto = {

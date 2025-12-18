@@ -4,7 +4,7 @@ const { generarToken } = require('../../auth/auth');
 const pool = require('../../db/db');
 
 describe('CU_2 - Agregar producto', () => {
-  it('agrega Pie de maracuya correctamente', async () => {
+  it('agregar un producto correctamente', async () => {
     // Generamos un token con rol 'inventario' para pasar la validación de rol
     const token = generarToken({ id: 9999, username: 'test-inventario', rol: 'inventario' });
 
